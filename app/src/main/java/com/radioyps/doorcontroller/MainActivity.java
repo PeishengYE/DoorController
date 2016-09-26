@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -50,24 +51,15 @@ public class MainActivity extends AppCompatActivity {
     private final static String  EXCEPTION_HOST_UNAVAILABLE = "EHOSTUNREACH";
     private final static String  EXCEPTION_HOST_REFUSED = "ECONNREFUSED";
     private static int response = RESULT_UNKNOWN;
+
+    private Button doorControlButton = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
-		/*
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mContext = this;
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-		*/
+        doorControlButton = (Button)findViewById(R.id.toggleDoorButton);
+
     }
 
     @Override
@@ -98,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         String cmd = "hello";
         if(isCmdFinished){
             isCmdFinished = false;
+            doorControlButton.setEnabled(false);
             Log.d(TAG, "toggleDoor()>> ok making a task ");
             Toast.makeText(this,
                     getString(R.string.cmd_in_progress), Toast.LENGTH_LONG).show();
@@ -198,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "toggleDoor()>> status of cmd: " + errorStr);
             Toast.makeText(mContext,
                     errorStr, Toast.LENGTH_LONG).show();
+            doorControlButton.setEnabled(true);
         }
 
 

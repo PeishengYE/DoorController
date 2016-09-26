@@ -21,9 +21,10 @@
         />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width= "260sp"
+        android:layout_height="130sp"
         android:text="@string/toogle_door"
+        android:textSize="40sp"
         android:id="@+id/toggleDoorButton"
         android:layout_gravity="center"
         android:onClick="toggleDoor" />
