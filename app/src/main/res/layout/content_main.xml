@@ -17,6 +17,13 @@
     <TextView android:text="@string/discription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/title_controller"
+        android:layout_gravity="center"
+        />
+    <TextView android:text="@string/discription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wifi_status"
         android:layout_gravity="center"
         />
 
@@ -27,6 +34,13 @@
         android:textSize="40sp"
         android:id="@+id/toggleDoorButton"
         android:layout_gravity="center"
-        android:onClick="toggleDoor" />
+        android:onClick="pressDoorButton" />
+
+    <TextView android:text="@string/discription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cmd_status"
+        android:layout_gravity="center"
+        />
 </LinearLayout>
 </LinearLayout>

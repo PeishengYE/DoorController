@@ -12,12 +12,24 @@ import android.net.wifi.WifiManager;
  */
 public class Utils {
 
+    private static   WifiNetworkConnectChangeReceiver mReceiver;
     public static boolean isStringBlank(String input){
         boolean ret = false;
-
+        if((input == null)||(input.trim() == "")){
+            ret = true;
+        }
         return ret;
     }
 
+    public static boolean isWifiConnected(Context context){
+        boolean ret = false;
+        String currentSsid = getCurrentSsid(context);
+        if(currentSsid != null){
+            ret = true;
+        }else
+            ret = false;
+        return ret;
+    }
     public static String getCurrentSsid(Context context) {
         String ssid = null;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -40,11 +52,17 @@ public class Utils {
 
 
 
-        public static void addWifiStateReceiver(Context context) {
+    public static void addWifiStateReceiver(Context context) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        context.registerReceiver(new WifiNetworkConnectChangeReceiver(), filter);
+        mReceiver = new WifiNetworkConnectChangeReceiver();
+        context.registerReceiver(mReceiver, filter);
         }
+
+    public static void disableWifiStateReceiver(Context context) {
+         context.unregisterReceiver(mReceiver);
+    }
+
 }

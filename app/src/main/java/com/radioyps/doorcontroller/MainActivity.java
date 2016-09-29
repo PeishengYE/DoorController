@@ -1,8 +1,11 @@
 package com.radioyps.doorcontroller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -28,38 +32,76 @@ import java.net.UnknownHostException;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static int connectPort = 5028;
-    private static String OPEN_THE_DOOR = "A412..&35?@!";
 
-    private final static int SOCKET_TIMEOUT = 10 * 000; /*10 seconds */
-    private final static String IP_ADDR = "192.168.12.238";
-    private final static String NETWORK_ERROR = "network error";
-    private static boolean isCmdFinished = true;
+
     private static Context mContext = null;
+    private static Handler mHandler;
 
-    private final static int RESULT_SUCCESS = 0x11;
-    private final static int RESULT_IO_ERROR = 0x12;
-    private final static int RESULT_TIMEOUT = 0x13;
 
-    private final static int RESULT_HOST_UNAVAILABLE = 0x14;
-    private final static int RESULT_HOST_REFUSED = 0x15;
-    private final static int RESULT_NETWORK_UNREACHABLE = 0x16;
-    private final static int RESULT_HOSTNAME_NOT_FOUND = 0x17;
-    private final static int RESULT_UNKNOWN = 0x18;
-
-    private final static String  EXCEPTION_NETWORK_UNREACHABLE = "ENETUNREACH";
-    private final static String  EXCEPTION_HOST_UNAVAILABLE = "EHOSTUNREACH";
-    private final static String  EXCEPTION_HOST_REFUSED = "ECONNREFUSED";
-    private static int response = RESULT_UNKNOWN;
-
+    private  boolean isCmdFinished = true;
     private Button doorControlButton = null;
+    private TextView wifiStatus = null;
+    private TextView cmdStatus = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
         mContext = this;
-        doorControlButton = (Button)findViewById(R.id.toggleDoorButton);
 
+        doorControlButton = (Button)findViewById(R.id.toggleDoorButton);
+        wifiStatus = (TextView)findViewById(R.id.wifi_status);
+        cmdStatus = (TextView)findViewById(R.id.cmd_status);
+
+        Utils.addWifiStateReceiver(mContext);
+
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case CommonConstants.MSG_UPDATE_WIFI_STATUS:
+                        wifiStatus.setText((String) msg.obj);
+                        break;
+                    case CommonConstants.MSG_UPDATE_BUTTON_STATUS:
+                        String messg =  (String) msg.obj;
+                        doorControlButton.setText(messg);
+
+                        if(messg.equalsIgnoreCase(CommonConstants.FLAG_CONTROLLER_ALIVE)){
+                            doorControlButton.setEnabled(true);
+                        }
+                        break;
+                    case CommonConstants.MSG_UPDATE_CMD_STATUS:
+                        cmdStatus.setText((String) msg.obj);
+                        break;
+                }
+            }
+        };
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        doorControlButton.setEnabled(false);
+
+        String ssid = Utils.getCurrentSsid(mContext);
+        if(ssid != null){
+            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, "Current WIFI: " + ssid);
+            Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
+            intent.setAction(CommonConstants.ACTION_PING);
+            startService(intent);
+        }
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        /* stop the service
+        * unregister the broadcast receiver
+        * */
+        Utils.disableWifiStateReceiver(mContext);
     }
 
     @Override
@@ -84,188 +126,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void toggleDoor(View view) {
-
-        Log.d(TAG, "toggleDoor()>> ");
-        String cmd = "hello";
-        if(isCmdFinished){
-            isCmdFinished = false;
-            doorControlButton.setEnabled(false);
-            Log.d(TAG, "toggleDoor()>> ok making a task ");
-            Toast.makeText(this,
-                    getString(R.string.cmd_in_progress), Toast.LENGTH_LONG).show();
-            sendCmdOverTcpTask sendTask = new sendCmdOverTcpTask();
-            sendTask.execute(cmd);
-
-        }else{
-            Log.d(TAG, "toggleDoor()>> previous cmd unfinished, give up ");
-            Toast.makeText(this,
-                    getString(R.string.prv_cmd_in_progress_give_up), Toast.LENGTH_LONG).show();
-        }
-
+    public static void sendMessage(int messageFlag, String message ){
+        Message.obtain(mHandler,
+                messageFlag,
+                message).sendToTarget();
 
     }
 
+    public void pressDoorButton(View view) {
 
-    public class sendCmdOverTcpTask extends AsyncTask<String, Void, String[]> {
-
-
-        private final String LOG_TAG = sendCmdOverTcpTask.class.getSimpleName();
-
-
-		private String getStatusString(int status){
-			String ret = getString(R.string.result_cmd_unknown);
-			switch(status){
-                 case RESULT_HOST_REFUSED:
-                     ret = getString(R.string.result_cmd_host_refused);
-                     break;
-                case RESULT_HOST_UNAVAILABLE:
-                    ret = getString(R.string.result_cmd_host_unavailable);
-                    break;
-                case RESULT_HOSTNAME_NOT_FOUND:
-                    ret = getString(R.string.result_cmd_hostname_not_found);
-                    break;
-                case RESULT_IO_ERROR:
-                    ret = getString(R.string.result_cmd_io_error);
-                    break;
-                case RESULT_NETWORK_UNREACHABLE:
-                    ret = getString(R.string.result_cmd_network_unreachable);
-                    break;
-                case RESULT_TIMEOUT:
-                    ret = getString(R.string.result_cmd_timeout);
-                    break;
-                case RESULT_SUCCESS:
-                    ret = getString(R.string.result_cmd_success);
-                    break;
-                default:
-                    ret = getString(R.string.result_cmd_unknown);
-
-
-
-            }
-            return ret;
-
-		}
-
-		private int getConnectionErrorCode(String error){
-			int ret = RESULT_UNKNOWN;
-
-			if(error.indexOf(EXCEPTION_NETWORK_UNREACHABLE) != -1){
-                  ret =  RESULT_NETWORK_UNREACHABLE;
-			}else if(error.indexOf(EXCEPTION_HOST_UNAVAILABLE) != -1){
-                  ret =  RESULT_HOST_UNAVAILABLE;
-			}else if(error.indexOf(EXCEPTION_HOST_REFUSED) != -1){
-                  ret = RESULT_HOST_REFUSED;
-			}
-            return ret;
-
-		}
-		private String getConnectionError(ConnectException ex){
-
-
-			String ret = null;
-
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            ex.printStackTrace(pw);
-            String exceptionStr = sw.toString(); 
-			String lines[] = exceptionStr.split("\\r?\\n");
-			for(int i = 0; i < lines.length; i++){
-				 if(lines[i].indexOf("ConnectException") != -1){
-					 ret = lines[i];
-					 break;
-				 }
-			 }
-
-
-            Log.d(TAG, "getConnectionError()>> Line: " + ret);
-			return ret;
-
-		}
-
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
-            String errorStr = getStatusString(response);
-            Log.d(TAG, "toggleDoor()>> status of cmd: " + errorStr);
-            Toast.makeText(mContext,
-                    errorStr, Toast.LENGTH_LONG).show();
-            doorControlButton.setEnabled(true);
-        }
-
-
-
-        @Override
-        protected String[] doInBackground(String... paramsNot) {
-
-
-            Socket socket = null;
-            String stringReceived = "";
-
-
-            try {
-
-                response = RESULT_UNKNOWN;
-
-                socket = new Socket(IP_ADDR, connectPort);
-                socket.setSoTimeout(SOCKET_TIMEOUT);
-
-                ByteArrayOutputStream byteArrayOutputStream =
-                        new ByteArrayOutputStream(1024);
-
-                byte[] buffer = new byte[1024];
-
-                int bytesRead;
-                InputStream inputStream = socket.getInputStream();
-                OutputStream outputStream = socket.getOutputStream();
-
-
-                outputStream.write(OPEN_THE_DOOR.getBytes());
-                outputStream.flush();
-
-
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, bytesRead);
-                    stringReceived += byteArrayOutputStream.toString("UTF-8");
-                }
-                outputStream.close();
-                inputStream.close();
-                response = RESULT_SUCCESS;
-
-            } catch (ConnectException e) {
-                e.printStackTrace();
-		        String errorStr = getConnectionError(e);
-                if(errorStr != null)
-				response =  getConnectionErrorCode(errorStr);
-                else
-                    response = RESULT_UNKNOWN;
-
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-                response = RESULT_HOSTNAME_NOT_FOUND ;
-
-            } catch (SocketTimeoutException e) {
-
-                e.printStackTrace();
-                response = RESULT_TIMEOUT;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                response = RESULT_IO_ERROR;
-
-
-            } finally {
-                isCmdFinished = true;
-                if (socket != null) {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
+        Log.d(TAG, "pressDoorButton()>> ");
+        /*
+        * ask service to send cmd */
+            Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
+            intent.setAction(CommonConstants.ACTION_PRESS_DOOR_BUTTON);
+            startService(intent);
     }
+
+
+
 }
