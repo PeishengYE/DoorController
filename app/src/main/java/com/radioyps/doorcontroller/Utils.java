@@ -13,6 +13,7 @@ import android.net.wifi.WifiManager;
 public class Utils {
 
     private static   WifiNetworkConnectChangeReceiver mReceiver;
+    private static boolean isReceiverRegister = false;
     public static boolean isStringBlank(String input){
         boolean ret = false;
         if((input == null)||(input.trim() == "")){
@@ -59,10 +60,15 @@ public class Utils {
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         mReceiver = new WifiNetworkConnectChangeReceiver();
         context.registerReceiver(mReceiver, filter);
+        isReceiverRegister = true;
         }
 
     public static void disableWifiStateReceiver(Context context) {
-         context.unregisterReceiver(mReceiver);
+        if(isReceiverRegister){
+            context.unregisterReceiver(mReceiver);
+            isReceiverRegister = false;
+        }
+
     }
 
 }

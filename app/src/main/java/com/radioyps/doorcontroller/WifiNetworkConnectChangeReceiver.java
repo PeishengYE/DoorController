@@ -36,21 +36,7 @@ public class WifiNetworkConnectChangeReceiver extends BroadcastReceiver {
                 }
             }
         }
-        /*
-        if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent.getAction())) {
-            Parcelable parcelableExtra = intent
-                    .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
-            if (null != parcelableExtra) {
-                NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
-                NetworkInfo.State state = networkInfo.getState();
-                boolean isConnected = state == NetworkInfo.State.CONNECTED;
-                Log.i(TAG, "isConnected " + isConnected);
-                if (isConnected) {
-                } else {
 
-                }
-            }
-        }*/
         Log.i(TAG, "onReceive()<< ");
     }
 
