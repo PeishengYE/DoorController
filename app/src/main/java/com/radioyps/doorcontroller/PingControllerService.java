@@ -38,18 +38,25 @@ public class PingControllerService extends IntentService {
     private final static String EXCEPTION_HOST_UNAVAILABLE = "EHOSTUNREACH";
     private final static String EXCEPTION_HOST_REFUSED = "ECONNREFUSED";
     private static int response = RESULT_UNKNOWN;
-    private static boolean isCmdFinished = true;
+    private static boolean isContinueConnect = true;
 
     public PingControllerService() {
         super("com.radioyps.doorcontroller");
     }
 
+    public static void enableConnect(){
+        isContinueConnect = true;
+    }
 
+    public static void disableConnect(){
+        isContinueConnect = false;
+    }
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
 
         if (action.equals(CommonConstants.ACTION_PING)) {
+            /*
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "sending Ping cmd");
             Log.d(TAG, "onHandleIntent()>> sending Ping cmd ");
             if(isControllerAlive()) {
@@ -58,29 +65,62 @@ public class PingControllerService extends IntentService {
             }else {
                 MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "failed to have ack on ping");
                 Log.d(TAG, "onHandleIntent()>> failed to have ack on ping ");
-            }
+            }*/
+            connectController();
         } else if (action.equals(CommonConstants.ACTION_PRESS_DOOR_BUTTON)) {
-            String receviedStr = sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
-            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "sending button press cmd");
-            Log.d(TAG, "onHandleIntent()>> sending button press cmd ");
-            if(receviedStr.equalsIgnoreCase(CommonConstants.ACK_PRESS_DOOR_BUTTON)){
-                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "success on sending button press cmd");
-                Log.d(TAG, "onHandleIntent()>> success on sending button press cmd ");
-            }else{
+            if(isControllerAlive()){
+
+                String receviedStr = sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
+                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.cmd_in_progress));
+                Log.d(TAG, "onHandleIntent()>> sending button press cmd ");
+                if(receviedStr.equalsIgnoreCase(CommonConstants.ACK_PRESS_DOOR_BUTTON)){
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.result_cmd_success));
+                    Log.d(TAG, "onHandleIntent()>> success on sending button press cmd ");
+                }else{
+                /*
                 MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "failed on sending button press cmd");
                 Log.d(TAG, "onHandleIntent()>> failed on sending button press cmd ");
+                */
+                    connectController();
+                }
+            }else {
+                connectController();
             }
+
 
         }
     }
 
 
+  private void connectController() {
+      
+	  while((!isControllerAlive())
+              && Utils.isWifiConnected(getBaseContext())
+              && isContinueConnect){
+          try{
+              Thread.sleep(5000L);
+          }catch (InterruptedException e){
+              Log.d(TAG, "connectController()>> thread sleep error ");
+          }
+
+	  }
+
+    }
+
+
     private boolean isControllerAlive() {
         boolean ret = false;
+        MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.on_connecting_controller));
+        Log.d(TAG, "onHandleIntent()>> sending Ping cmd ");
         String receviedStr = sendCmd(CommonConstants.CMD_PING_CONTROLLER);
         if (receviedStr.equalsIgnoreCase(CommonConstants.PING_ACK)) {
+            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.success_on_connecting_controller));
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.FLAG_CONTROLLER_ALIVE);
+            Log.d(TAG, "onHandleIntent()>> connected");
             ret = true;
+        }else {
+            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, receviedStr);
+            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, getString(R.string.no_wifi_connected));
         }
         return ret;
     }
@@ -215,7 +255,7 @@ public class PingControllerService extends IntentService {
 
 
         } finally {
-            isCmdFinished = true;
+
             if (socket != null) {
                 try {
                     socket.close();
@@ -224,8 +264,17 @@ public class PingControllerService extends IntentService {
                 }
             }
         }
-        Log.d(TAG, "sendCmd()>> string received " + stringReceived);
-        return stringReceived;
+
+        String ret = null;
+        if(response == RESULT_SUCCESS){
+            ret = stringReceived;
+        }else {
+             ret = getStatusString(response);
+
+        }
+        Log.d(TAG, "sendCmd()>> reply with " + ret);
+        return ret;
+
     }
 }
 
