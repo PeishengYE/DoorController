@@ -19,11 +19,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/title_controller"
         android:layout_gravity="center"
+        android:textAppearance="?android:textAppearanceLarge"
         />
     <TextView android:text="@string/discription"
         android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content"
         android:id="@+id/wifi_status"
+        android:textAppearance="?android:textAppearanceLarge"
         android:layout_gravity="center"
         />
 
@@ -34,6 +37,7 @@
         android:textSize="40sp"
         android:id="@+id/toggleDoorButton"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:onClick="pressDoorButton" />
 
     <TextView android:text="@string/discription"
@@ -41,6 +45,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/cmd_status"
         android:layout_gravity="center"
+
+        android:textAppearance="?android:textAppearanceMedium"
         />
 </LinearLayout>
 </LinearLayout>
