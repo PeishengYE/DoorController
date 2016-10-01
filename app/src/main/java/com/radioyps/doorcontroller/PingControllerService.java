@@ -50,11 +50,27 @@ public class PingControllerService extends IntentService {
         String action = intent.getAction();
 
         if (action.equals(CommonConstants.ACTION_PING)) {
-            isControllerAlive();
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "sending Ping cmd");
+            Log.d(TAG, "onHandleIntent()>> sending Ping cmd ");
+            if(isControllerAlive()) {
+                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "successfully received ack on ping");
+                Log.d(TAG, "onHandleIntent()>> successfully received ack on ping ");
+            }else {
+                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "failed to have ack on ping");
+                Log.d(TAG, "onHandleIntent()>> failed to have ack on ping ");
+            }
         } else if (action.equals(CommonConstants.ACTION_PRESS_DOOR_BUTTON)) {
-            sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
+            String receviedStr = sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "sending button press cmd");
+            Log.d(TAG, "onHandleIntent()>> sending button press cmd ");
+            if(receviedStr.equalsIgnoreCase(CommonConstants.ACK_PRESS_DOOR_BUTTON)){
+                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "success on sending button press cmd");
+                Log.d(TAG, "onHandleIntent()>> success on sending button press cmd ");
+            }else{
+                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "failed on sending button press cmd");
+                Log.d(TAG, "onHandleIntent()>> failed on sending button press cmd ");
+            }
+
         }
     }
 
@@ -62,7 +78,7 @@ public class PingControllerService extends IntentService {
     private boolean isControllerAlive() {
         boolean ret = false;
         String receviedStr = sendCmd(CommonConstants.CMD_PING_CONTROLLER);
-        if (receviedStr.equalsIgnoreCase(CommonConstants.CMD_PING_CONTROLLER)) {
+        if (receviedStr.equalsIgnoreCase(CommonConstants.PING_ACK)) {
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.FLAG_CONTROLLER_ALIVE);
             ret = true;
         }
@@ -208,6 +224,7 @@ public class PingControllerService extends IntentService {
                 }
             }
         }
+        Log.d(TAG, "sendCmd()>> string received " + stringReceived);
         return stringReceived;
     }
 }

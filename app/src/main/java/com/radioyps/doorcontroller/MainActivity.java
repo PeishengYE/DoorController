@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case CommonConstants.MSG_UPDATE_BUTTON_STATUS:
                         String messg =  (String) msg.obj;
-                        doorControlButton.setText(messg);
+                        //doorControlButton.setText(messg);
 
                         if(messg.equalsIgnoreCase(CommonConstants.FLAG_CONTROLLER_ALIVE)){
                             doorControlButton.setEnabled(true);
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
             intent.setAction(CommonConstants.ACTION_PING);
             startService(intent);
+            Log.d(TAG, "onStart()>> start service require Ping Controller ");
         }
 
 
