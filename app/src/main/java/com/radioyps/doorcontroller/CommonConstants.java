@@ -19,7 +19,8 @@ public final class CommonConstants {
 
     public static final String CMD_PING_CONTROLLER = "78*(^@/uid";
     public static final String PING_ACK = "^3234adsfa/?";
-    public static final String FLAG_CONTROLLER_ALIVE =  "Success on Connecting Controller"; ;
+    public static final String DISABLE_BUTTON =  "com.radioyps.doorcontroller.DISABLE_BUTTON";
+    public static final String ENABLE_BUTTON =  "com.radioyps.doorcontroller.ENABLE_BUTTON";;
 
 
 

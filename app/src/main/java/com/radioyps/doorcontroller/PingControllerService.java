@@ -2,9 +2,7 @@ package com.radioyps.doorcontroller;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import com.radioyps.doorcontroller.CommonConstants;
 
 /**
  * Created by developer on 28/09/16.
@@ -69,12 +66,15 @@ public class PingControllerService extends IntentService {
             connectController();
         } else if (action.equals(CommonConstants.ACTION_PRESS_DOOR_BUTTON)) {
             if(isControllerAlive()){
-
-                String receviedStr = sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
+                MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
                 MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.cmd_in_progress));
+                String receviedStr = sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
+
+
                 Log.d(TAG, "onHandleIntent()>> sending button press cmd ");
                 if(receviedStr.equalsIgnoreCase(CommonConstants.ACK_PRESS_DOOR_BUTTON)){
                     MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.result_cmd_success));
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.ENABLE_BUTTON);
                     Log.d(TAG, "onHandleIntent()>> success on sending button press cmd ");
                 }else{
                 /*
@@ -115,12 +115,12 @@ public class PingControllerService extends IntentService {
         String receviedStr = sendCmd(CommonConstants.CMD_PING_CONTROLLER);
         if (receviedStr.equalsIgnoreCase(CommonConstants.PING_ACK)) {
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.success_on_connecting_controller));
-            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.FLAG_CONTROLLER_ALIVE);
+            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.ENABLE_BUTTON);
             Log.d(TAG, "onHandleIntent()>> connected");
             ret = true;
         }else {
             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, receviedStr);
-            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, getString(R.string.no_wifi_connected));
+            MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
         }
         return ret;
     }

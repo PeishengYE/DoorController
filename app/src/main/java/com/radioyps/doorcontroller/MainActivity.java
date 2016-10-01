@@ -2,32 +2,16 @@ package com.radioyps.doorcontroller;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.ConnectException;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
                         String messg =  (String) msg.obj;
                         //doorControlButton.setText(messg);
 
-                        if(messg.equalsIgnoreCase(CommonConstants.FLAG_CONTROLLER_ALIVE)){
+                        if(messg.equalsIgnoreCase(CommonConstants.ENABLE_BUTTON)){
                             doorControlButton.setEnabled(true);
-                            doorControlButton.setText(getString(R.string.toogle_door));
-                        }else {
+                            doorControlButton.setText(getString(R.string.button_available));
+                        }else if(messg.equalsIgnoreCase(CommonConstants.DISABLE_BUTTON)){
                             doorControlButton.setText(getString(R.string.button_not_available));
                             doorControlButton.setEnabled(false);
                         }
@@ -153,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
             intent.setAction(CommonConstants.ACTION_PRESS_DOOR_BUTTON);
             startService(intent);
+        /* disable botton as the door action is slow */
+             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
     }
 
 
