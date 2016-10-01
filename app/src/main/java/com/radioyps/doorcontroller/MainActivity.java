@@ -96,12 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
-    protected void onStop() {
-        super.onStop();
-        /* stop the service
-        * unregister the broadcast receiver
-        * */
+    protected void onDestroy() {
+        super.onDestroy();
         Utils.disableWifiStateReceiver(mContext);
     }
 
