@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
                         if(messg.equalsIgnoreCase(CommonConstants.FLAG_CONTROLLER_ALIVE)){
                             doorControlButton.setEnabled(true);
+                            doorControlButton.setText(getString(R.string.toogle_door));
+                        }else {
+                            doorControlButton.setText(getString(R.string.button_not_available));
+                            doorControlButton.setEnabled(false);
                         }
                         break;
                     case CommonConstants.MSG_UPDATE_CMD_STATUS:
@@ -83,10 +87,13 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         doorControlButton.setEnabled(false);
+        doorControlButton.setText(getString(R.string.button_not_available));
+        PingControllerService.enableConnect();
 
+        sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.waiting_wifi_connected));
         String ssid = Utils.getCurrentSsid(mContext);
         if(ssid != null){
-            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, "Current WIFI: " + ssid);
+            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, getString(R.string.current_wifi_ssid) + ssid);
             Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
             intent.setAction(CommonConstants.ACTION_PING);
             startService(intent);
@@ -96,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        /*Stop trying connecting to controller */
+        PingControllerService.disableConnect();
+    }
 
     @Override
     protected void onDestroy() {
