@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction(CommonConstants.ACTION_PING);
             startService(intent);
             Log.d(TAG, "onStart()>> start service require Ping Controller ");
+        }else{
+            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS,getString(R.string.no_wifi_connected));
         }
 
 
@@ -138,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction(CommonConstants.ACTION_PRESS_DOOR_BUTTON);
             startService(intent);
         /* disable botton as the door action is slow */
-             MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
+            // MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
     }
 
 

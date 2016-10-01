@@ -39,9 +39,12 @@ public class WifiNetworkConnectChangeReceiver extends BroadcastReceiver {
                 }else {
                     MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, context.getString(R.string.no_wifi_connected));
                     MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, context.getString(R.string.waiting_wifi_connected));
                     Log.i(TAG, "onReceive()>> WIFI disconnected, stop Ping controller");
                     PingControllerService.disableConnect();
                 }
+            }else{
+                //Log.i(TAG, "onReceive()>> WIFI disconnected, stop Ping controller");
             }
         }
 

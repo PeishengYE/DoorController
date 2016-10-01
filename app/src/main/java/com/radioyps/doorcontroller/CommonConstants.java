@@ -28,7 +28,9 @@ public final class CommonConstants {
     public static String CMD_PRESS_DOOR_BUTTON = "A412..&35?@!";
     public static String ACK_PRESS_DOOR_BUTTON =  "B835??/!xx";
     public final static int SOCKET_TIMEOUT = 10 * 000; /*10 seconds */
+    // ip address for testing
     public final static String IP_ADDR = "192.168.12.238";
+    // ip address for the real door controller
     //public final static String IP_ADDR = "192.168.12.240";
     public final static String NETWORK_ERROR = "network error";
 }
