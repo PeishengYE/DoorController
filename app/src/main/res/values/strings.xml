@@ -13,4 +13,7 @@
     <string name="result_cmd_network_unreachable">没有网络服务</string>
     <string name="result_cmd_hostname_not_found">控制器域名无法解析</string>
     <string name="result_cmd_unknown">未知错误</string>
+    <string name="enable_wifi_scan">enable_wifi_scan</string>
+    <string name="wifi_scan_result">wifi_scan_result</string>
+    <string name="wifi_scan_list">wifi_scan_result</string>
 </resources>

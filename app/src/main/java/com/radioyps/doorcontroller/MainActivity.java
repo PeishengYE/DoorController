@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         wifiStatus = (TextView)findViewById(R.id.wifi_status);
         cmdStatus = (TextView)findViewById(R.id.cmd_status);
 
-        Utils.addWifiStateReceiver(mContext);
+        //Utils.addWifiStateReceiver(mContext);
 
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         /* stop the service
         * unregister the broadcast receiver
         * */
-        Utils.disableWifiStateReceiver(mContext);
+        //Utils.disableWifiStateReceiver(mContext);
     }
 
     @Override
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, WifiScanResult.class));
             return true;
         }
 

@@ -42,5 +42,6 @@
         android:id="@+id/cmd_status"
         android:layout_gravity="center"
         />
+
 </LinearLayout>
 </LinearLayout>
