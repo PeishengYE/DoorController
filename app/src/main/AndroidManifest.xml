@@ -33,7 +33,10 @@
                 <action android:name="android.net.wifi.SCAN_RESULTS_AVAILABLE_ACTION" />
             </intent-filter>
         </receiver>
+        <activity
+            android:name=".WifiScanResult">
 
+    </activity>
 
         <service
             android:name=".PingControllerService"

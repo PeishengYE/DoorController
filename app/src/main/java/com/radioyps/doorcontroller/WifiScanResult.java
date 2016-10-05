@@ -8,6 +8,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class WifiScanResult extends AppCompatActivity implements View.OnClickListener {
 
-
+   private static final  String TAG = WifiScanResult.class.getSimpleName();
    private  WifiManager wifi;
    private  ListView wifi_ssid_list;
    private  TextView textStatus;
@@ -58,11 +59,14 @@ public class WifiScanResult extends AppCompatActivity implements View.OnClickLis
             public void onReceive(Context c, Intent intent) {
                 wifiScanResults = wifi.getScanResults();
                 wifiResultSize = wifiScanResults.size();
+                String wifi_net_item;
                 try {
                     wifiResultSize = wifiResultSize - 1;
                     while (wifiResultSize >= 0) {
                         HashMap<String, String> item = new HashMap<String, String>();
-                        item.put(ITEM_KEY, wifiScanResults.get(wifiResultSize).SSID + "  " + wifiScanResults.get(wifiResultSize).capabilities);
+                        wifi_net_item = wifiScanResults.get(wifiResultSize).SSID + "  " + wifiScanResults.get(wifiResultSize).capabilities;
+                        item.put(ITEM_KEY, wifi_net_item );
+                        Log.i(TAG, "wifi net: " + wifi_net_item);
 
                         arraylist.add(item);
                         wifiResultSize--;
