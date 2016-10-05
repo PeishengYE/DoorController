@@ -29,11 +29,22 @@ public class WifiNetworkConnectChangeReceiver extends BroadcastReceiver {
                     Log.i(TAG, "onReceive()>> WIFI connected");
                     String ssid = Utils.getCurrentSsid(context);
                     if(ssid != null)
-                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, "Current WiFi: " + ssid);
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, context.getString(R.string.current_wifi_ssid) + ssid);
+                    PingControllerService.enableConnect();
+                    Intent intentStartService = new Intent(context, PingControllerService.class);
+                    intentStartService.setAction(CommonConstants.ACTION_PING);
+                    context.startService(intentStartService);
+
+                    Log.d(TAG, "onStart()>> start service require Ping Controller ");
                 }else {
-                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, "WiFi disconnect");
-                    Log.i(TAG, "onReceive()>> WIFI disconnected");
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, context.getString(R.string.no_wifi_connected));
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, context.getString(R.string.waiting_wifi_connected));
+                    Log.i(TAG, "onReceive()>> WIFI disconnected, stop Ping controller");
+                    PingControllerService.disableConnect();
                 }
+            }else{
+                //Log.i(TAG, "onReceive()>> WIFI disconnected, stop Ping controller");
             }
         }else if(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals (action)){
 

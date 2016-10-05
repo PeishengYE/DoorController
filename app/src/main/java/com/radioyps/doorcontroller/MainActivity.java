@@ -2,32 +2,16 @@ package com.radioyps.doorcontroller;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.ConnectException;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,10 +46,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case CommonConstants.MSG_UPDATE_BUTTON_STATUS:
                         String messg =  (String) msg.obj;
-                        doorControlButton.setText(messg);
+                        //doorControlButton.setText(messg);
 
-                        if(messg.equalsIgnoreCase(CommonConstants.FLAG_CONTROLLER_ALIVE)){
+                        if(messg.equalsIgnoreCase(CommonConstants.ENABLE_BUTTON)){
                             doorControlButton.setEnabled(true);
+                            doorControlButton.setText(getString(R.string.button_available));
+                        }else if(messg.equalsIgnoreCase(CommonConstants.DISABLE_BUTTON)){
+                            doorControlButton.setText(getString(R.string.button_not_available));
+                            doorControlButton.setEnabled(false);
                         }
                         break;
                     case CommonConstants.MSG_UPDATE_CMD_STATUS:
@@ -83,13 +71,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         doorControlButton.setEnabled(false);
+        doorControlButton.setText(getString(R.string.button_not_available));
+        PingControllerService.enableConnect();
 
+        sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.waiting_wifi_connected));
         String ssid = Utils.getCurrentSsid(mContext);
         if(ssid != null){
-            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, "Current WIFI: " + ssid);
+            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, getString(R.string.current_wifi_ssid) + ssid);
             Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
             intent.setAction(CommonConstants.ACTION_PING);
             startService(intent);
+            Log.d(TAG, "onStart()>> start service require Ping Controller ");
+        }else{
+            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS,getString(R.string.no_wifi_connected));
         }
 
 
@@ -98,10 +92,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        /* stop the service
-        * unregister the broadcast receiver
-        * */
-        //Utils.disableWifiStateReceiver(mContext);
+        /*Stop trying connecting to controller */
+        PingControllerService.disableConnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -142,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
             intent.setAction(CommonConstants.ACTION_PRESS_DOOR_BUTTON);
             startService(intent);
+        /* disable botton as the door action is slow */
+            // MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
     }
 
 

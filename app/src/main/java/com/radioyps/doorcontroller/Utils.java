@@ -6,13 +6,21 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 /**
  * Created by yep on 25/09/16.
  */
 public class Utils {
 
+    private static String TAG = Utils.class.getSimpleName();
     private static   WifiNetworkConnectChangeReceiver mReceiver;
+    private static boolean isReceiverRegister = false;
+    private static boolean wifiConnected = false;
+    private static boolean mobileConnected = false;
+
+    private  static final  String UNKNOWN_SSID_1 = "unknown ssid";
+    private  static final  String UNKNOWN_SSID_2 = "0x";
     public static boolean isStringBlank(String input){
         boolean ret = false;
         if((input == null)||(input.trim() == "")){
@@ -22,13 +30,33 @@ public class Utils {
     }
 
     public static boolean isWifiConnected(Context context){
-        boolean ret = false;
-        String currentSsid = getCurrentSsid(context);
-        if(currentSsid != null){
-            ret = true;
-        }else
-            ret = false;
-        return ret;
+
+            ConnectivityManager connMgr =
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+            if (activeInfo != null && activeInfo.isConnected()) {
+                wifiConnected = activeInfo.getType() == ConnectivityManager.TYPE_WIFI;
+                mobileConnected = activeInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            } else {
+                wifiConnected = false;
+                mobileConnected = false;
+            }
+        if (mobileConnected)
+            Log.i(TAG, "isWifiConnected()>> mobile connected");
+        else
+            Log.i(TAG, "isWifiConnected()>> mobile connected");
+
+        if (wifiConnected)
+        Log.i(TAG, "isWifiConnected()>> WIFI connected");
+        else
+            Log.i(TAG, "isWifiConnected()>> WIFI connected");
+
+        if(getCurrentSsid(context) == null){
+            wifiConnected = false;
+        }
+        return wifiConnected;
+
     }
     public static String getCurrentSsid(Context context) {
         String ssid = null;
@@ -43,6 +71,12 @@ public class Utils {
             final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
             if (connectionInfo != null && !isStringBlank(connectionInfo.getSSID())) {
                 ssid = connectionInfo.getSSID();
+                Log.i(TAG, "getCurrentSsid()>> current SSID: " +ssid);
+                if((ssid.indexOf(UNKNOWN_SSID_1)!= -1)
+                ||(ssid.equalsIgnoreCase(UNKNOWN_SSID_2))){
+                    Log.i(TAG, "getCurrentSsid()>> ssid not vaild, replaced with null");
+                    ssid = null;
+                }
             }
         }
 
@@ -61,10 +95,15 @@ public class Utils {
 
         mReceiver = new WifiNetworkConnectChangeReceiver();
         context.registerReceiver(mReceiver, filter);
+        isReceiverRegister = true;
         }
 
     public static void disableWifiStateReceiver(Context context) {
-         context.unregisterReceiver(mReceiver);
+        if(isReceiverRegister){
+            context.unregisterReceiver(mReceiver);
+            isReceiverRegister = false;
+        }
+
     }
 
 }
