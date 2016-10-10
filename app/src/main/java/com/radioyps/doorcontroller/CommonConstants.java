@@ -39,4 +39,5 @@ public final class CommonConstants {
     // ip address for the real door controller
     public final static String IP_ADDR = "192.168.12.240";
     public final static String NETWORK_ERROR = "network error";
+    public static final String GCM_authrized_mesg = "ds`133*(/.Mnd";
 }

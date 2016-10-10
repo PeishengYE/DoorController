@@ -90,11 +90,11 @@ public class PingControllerService extends IntentService {
 
 
         }else if(action.equals(CommonConstants.ACTION_PRESS_REMOTE_BUTTON)){
-        Log.d(TAG, "onHandleIntent()>> GCM sending ");
-        MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
-        sendGCM("open the door");
+           Log.d(TAG, "onHandleIntent()>> GCM sending ");
+           MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
+           sendGCM(CommonConstants.GCM_authrized_mesg);
 
-    }
+        }
     }
 
     private void sendGCM(String message){
