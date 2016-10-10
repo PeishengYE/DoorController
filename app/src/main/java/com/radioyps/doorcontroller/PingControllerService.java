@@ -3,6 +3,7 @@ package com.radioyps.doorcontroller;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,18 +66,18 @@ public class PingControllerService extends IntentService {
             }*/
             connectController();
         } else if (action.equals(CommonConstants.ACTION_PRESS_DOOR_BUTTON)) {
-            if(isControllerAlive()){
+            if(isControllerAlive()) {
                 MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
                 MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.cmd_in_progress));
                 String receviedStr = sendCmd(CommonConstants.CMD_PRESS_DOOR_BUTTON);
 
 
                 Log.d(TAG, "onHandleIntent()>> sending button press cmd ");
-                if(receviedStr.equalsIgnoreCase(CommonConstants.ACK_PRESS_DOOR_BUTTON)){
+                if (receviedStr.equalsIgnoreCase(CommonConstants.ACK_PRESS_DOOR_BUTTON)) {
                     MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.result_cmd_success));
                     MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.ENABLE_BUTTON);
                     Log.d(TAG, "onHandleIntent()>> success on sending button press cmd ");
-                }else{
+                } else {
                 /*
                 MainActivity.sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, "failed on sending button press cmd");
                 Log.d(TAG, "onHandleIntent()>> failed on sending button press cmd ");
@@ -88,11 +89,22 @@ public class PingControllerService extends IntentService {
             }
 
 
-        }
+        }else if(action.equals(CommonConstants.ACTION_PRESS_REMOTE_BUTTON)){
+        Log.d(TAG, "onHandleIntent()>> GCM sending ");
+        MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
+        sendGCM("open the door");
+
+    }
+    }
+
+    private void sendGCM(String message){
+        GcmSendTask gcmTask = new GcmSendTask();
+        String [] cmd = new String[] {message, ""};
+        gcmTask.execute(cmd);
     }
 
 
-  private void connectController() {
+    private void connectController() {
       
 	  while((!isControllerAlive())
               && Utils.isWifiConnected(getBaseContext())

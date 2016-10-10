@@ -24,8 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     private  boolean isCmdFinished = true;
     private Button doorControlButton = null;
+    private Button doorRemoteButton = null;
     private TextView wifiStatus = null;
     private TextView cmdStatus = null;
+    private TextView gcmStatus = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
 
         doorControlButton = (Button)findViewById(R.id.toggleDoorButton);
+        doorRemoteButton = (Button)findViewById(R.id.gcmSending);
         wifiStatus = (TextView)findViewById(R.id.wifi_status);
         cmdStatus = (TextView)findViewById(R.id.cmd_status);
+        gcmStatus = (TextView)findViewById(R.id.gcm_status);
 
         //Utils.addWifiStateReceiver(mContext);
 
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case CommonConstants.MSG_UPDATE_CMD_STATUS:
                         cmdStatus.setText((String) msg.obj);
+                        break;
+                    case CommonConstants.MSG_GCM_CMD_STATUS:
+                        gcmStatus.setText((String) msg.obj);
                         break;
                 }
             }
@@ -125,9 +132,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void sendMessage(int messageFlag, String message ){
+
+        String mesg = null;
+
+        if(message.equalsIgnoreCase(CommonConstants.FLAG_GCM_FAILURE)){
+            mesg = mContext.getString(R.string.remote_door_cmd_in_failure);
+        }else if(message.equalsIgnoreCase(CommonConstants.FLAG_GCM_OK)){
+            mesg = mContext.getString(R.string.remote_door_cmd_in_success);
+        }else
+            mesg = message;
+
         Message.obtain(mHandler,
                 messageFlag,
-                message).sendToTarget();
+                mesg).sendToTarget();
 
     }
 
@@ -143,6 +160,17 @@ public class MainActivity extends AppCompatActivity {
             // MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
     }
 
+    public void pressRemoteButton(View view) {
+
+        Log.d(TAG, "pressDoorRemoteControlButton()>> ");
+        /*
+        * ask service to send cmd */
+        Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
+        intent.setAction(CommonConstants.ACTION_PRESS_REMOTE_BUTTON);
+        startService(intent);
+        /* disable botton as the door action is slow */
+        // MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
+    }
 
 
 }
