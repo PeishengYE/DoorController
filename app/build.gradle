@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'DOORCONFIRMKAY', MyDoorConfirmKey
+        it.buildConfigField 'String', 'GCMAPIKEY', MyGCMAPIKey
+    }
 }
 
 dependencies {

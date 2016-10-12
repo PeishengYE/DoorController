@@ -28,8 +28,8 @@ import java.net.URL;
         @Override
         protected String doInBackground(String... params) {
 
-            //final String API_KEY = "AIzaSyBfFzSi7nhsNkPC-N0H8s1ERIjQBu1soP8"; // An API key saved on the app server that gives the app server authorized access to Google services
-            final String API_KEY = "AIzaSyABZ_HnSS1VOcE8DCXhKGfE0Mn4HLyfCyE"; // An API key saved on the app server that gives the app server authorized access to Google services
+
+            final String API_KEY = BuildConfig.GCMAPIKEY; // An API key saved on the app server that gives the app server authorized access to Google services
 //            final String CLIENT_REG_ID = "e_2eh3HclGQ:APA91bGm55kjkioHcKoY0NTq2xX1WL4mSkFuDtvOEz9QASsw23sYmfRSrRErJZuPGgCxX0z_m7wXne9f3YyRGQgREyr6U0nAD13vrBj5lkv8EXBEwcowih-dFO9KJzCJe7eLzqIfWwj0"; //An ID issued by the GCM connection servers to the client app that allows it to receive messages
             final String CLIENT_REG_ID = "dTfcTU6yk6s:APA91bFXnAc-Vy_DjXIe09WURsyN-bewR3mfkbzRyBxyk1MBHKViTmvs30o-PJcDt3d9E3bRbadqfCj0LTOWBCqCtJXYTvmMUEPVuOE1IWNKcywM9XAd4bK8HaBHrRz-0wZJRdOFOO6y";
             final String postData = "{ \"registration_ids\": [ \"" + CLIENT_REG_ID + "\" ], " +
