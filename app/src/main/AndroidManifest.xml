@@ -35,8 +35,11 @@
         </receiver>
         <activity
             android:name=".WifiScanResult">
+        </activity>
 
-    </activity>
+        <activity
+            android:name=".SettingsActivity">
+        </activity>
 
         <service
             android:name=".PingControllerService"
