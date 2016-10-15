@@ -4,8 +4,8 @@ This is a personal project to control my garage door.
 Google Cloud Message, Embedded LINUX, Android APP, IO control 
 
 ## 1) Hardware:
-The controller is using an A13 PCB board. To find out what's A13, you can follow this link
-https://www.olimex.com/wiki/A13-OLinuXino.  
+The controller is using an A13 PCB board. To find out what's A13, you can follow [this link]
+(https://www.olimex.com/wiki/A13-OLinuXino)  
 
 By controlling the  24V output (The original use is for a screen backlight) from this PCB,
 I'm able to control a relay to simulate button pressing for my Garage
