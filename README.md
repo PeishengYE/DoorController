@@ -38,3 +38,9 @@ The software consis of four parts:
 Fortunately we can use any cheap Phone or tablet to do this task, like the Datawind cheap device. You do not need a beautiful screen or  a good touch screen. 
 
    In the future development, we can also use this device as our home sensor gateway. 
+
+###  ScreenShot of the current UI 
+![UI in English]
+(https://github.com/PeishengYE/DoorController/blob/master/docs/Ui_doorController_003.png)
+![UI in Chinese]
+(https://github.com/PeishengYE/DoorController/blob/master/docs/Ui_doorController_chinese_001.png)
