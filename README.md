@@ -1,7 +1,7 @@
 # DoorController
 This is a personal project to control my garage door. 
 ## Keyword: 
-Embedded LINUX, Android APP, IO control 
+Google Cloud Message, Embedded LINUX, Android APP, IO control 
 
 ## 1) Hardware:
 The controller is using an A13 PCB board. To find out what's A13, you can follow this link
@@ -29,19 +29,13 @@ The software consis of four parts:
    A network broadcast receiver to monitor the WIFI network change event
    A Intent service to do the network connection with controller and update UI according the connection result
 
-## 3) Design Tip
-   When I'm approaching my home, trying to use this APP, I often have a problem of WIFI connection. 
-   In this context, my Phone's Wifi connection is just connected, or trying to connect, as the **WIFI signal is poor**. 
-   As soon as the App start, a service is created to connect the controller. 
-   **Whenever the connection is established**, the UI is updated to show that the User Operation is available at that moment.
-   **Whenever the user is sending a command to the controller**, a check is start before sending this command. 
-   A message is showing on the phone to tell the user this status
-   
-## 4) Next Steps
-   Introduce **encryption** between the communication of controller and my phone. 
-   Find out a way to initilze the controller's network parameter, like WIFI ssid, passwd, etc. 
-   Introduce **a lock screen** when a user trying to send door control command. 
-   this is to prevent any wrong operation when the user forget to lock the screen after starting this app. 
-   Introduce **Google Cloud Message** to remote control this controller
 
+## 3) About Google Cloud Message 
+ 
+    To establish a WIFI connection may take more than three minutes when the WIFI signal is bad or the Home used router is too busy to reply.    This make the previous WIFI design inaccessible. That's why I introduce the Google Cloud Message. User can use any data connection to connect this door controller. 
    
+   This design make the whole system very security and reliable, as GCM is secure by google.  Every GCM client have a unique token in the world.  The disadvantage is that we need a Android Phone/Tablet running Google Cloud Message Service to receive this message. Then when this message arrive, it send a requirement to the door controller. it works like a proxy.
+
+Fortunately we can use any cheap Phone or tablet to do this task, like the Datawind cheap device. You do not need a beautiful screen or  a good touch screen. 
+
+   In the future development, we can also use this device as our home sensor gateway. 
