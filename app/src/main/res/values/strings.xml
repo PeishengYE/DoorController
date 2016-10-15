@@ -18,13 +18,13 @@
     <string name="wifi_scan_result">wifi_scan_result</string>
     <string name="wifi_scan_list">wifi_scan_result</string>
     <string name="on_connecting_controller">Connecting...</string>
-    <string name="success_on_connecting_controller">Successful on connecting controller</string>
+    <string name="success_on_connecting_controller">Local ontroller connected</string>
     <string name="button_not_available">Unavailable</string>
     <string name="button_remote_control">Remote Control</string>
     <string name="current_wifi_ssid">WIFI connected:</string>
     <string name="no_wifi_connected">WIFI not connected</string>
     <string name="waiting_wifi_connected">Waiting controller</string>
-    <string name="remote_door_control">Garage Door remote control</string>
+    <string name="remote_door_control_status">Remote control status</string>
     <string name="remote_door_cmd_in_progress">Sending Remote command</string>
     <string name="remote_door_cmd_in_success">Successful on sending remote command</string>
     <string name="remote_door_cmd_in_failure">Error on sending remote command</string>
