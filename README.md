@@ -30,9 +30,8 @@ The software consis of four parts:
    A Intent service to do the network connection with controller and update UI according the connection result
 
 
-## 3) About Google Cloud Message 
- 
-    To establish a WIFI connection may take more than three minutes when the WIFI signal is bad or the Home used router is too busy to reply.    This make the previous WIFI design inaccessible. That's why I introduce the Google Cloud Message. User can use any data connection to connect this door controller. 
+###  About Google Cloud Message 
+   To establish a WIFI connection may take more than three minutes when the WIFI signal is bad or the Home used router is too busy to reply.    This make the previous WIFI design inaccessible. That's why I introduce the Google Cloud Message. User can use any data connection to connect this door controller. 
    
    This design make the whole system very security and reliable, as GCM is secure by google.  Every GCM client have a unique token in the world.  The disadvantage is that we need a Android Phone/Tablet running Google Cloud Message Service to receive this message. Then when this message arrive, it send a requirement to the door controller. it works like a proxy.
 
