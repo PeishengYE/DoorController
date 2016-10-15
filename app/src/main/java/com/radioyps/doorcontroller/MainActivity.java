@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         cmdStatus = (TextView)findViewById(R.id.cmd_status);
         gcmStatus = (TextView)findViewById(R.id.gcm_status);
 
+        doorRemoteButton.setBackgroundResource(R.drawable.gcm_icon);
+
         //Utils.addWifiStateReceiver(mContext);
 
         mHandler = new Handler() {
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         sendMessage(CommonConstants.MSG_UPDATE_CMD_STATUS, getString(R.string.waiting_wifi_connected));
         String ssid = Utils.getCurrentSsid(mContext);
         if(ssid != null){
-            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, getString(R.string.current_wifi_ssid) + ssid);
+            sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, getString(R.string.current_wifi_ssid) + " "  + ssid);
             Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
             intent.setAction(CommonConstants.ACTION_PING);
             startService(intent);

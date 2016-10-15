@@ -29,7 +29,7 @@ public class WifiNetworkConnectChangeReceiver extends BroadcastReceiver {
                     Log.i(TAG, "onReceive()>> WIFI connected");
                     String ssid = Utils.getCurrentSsid(context);
                     if(ssid != null)
-                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, context.getString(R.string.current_wifi_ssid) + ssid);
+                    MainActivity.sendMessage(CommonConstants.MSG_UPDATE_WIFI_STATUS, context.getString(R.string.current_wifi_ssid) + " "+ ssid);
                     PingControllerService.enableConnect();
                     Intent intentStartService = new Intent(context, PingControllerService.class);
                     intentStartService.setAction(CommonConstants.ACTION_PING);
