@@ -12,27 +12,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
-    private static Context mContext = null;
+
     private static Handler mHandler;
 
 
-    private  boolean isCmdFinished = true;
+
     private Button doorControlButton = null;
     private Button doorRemoteButton = null;
     private TextView wifiStatus = null;
     private TextView cmdStatus = null;
     private TextView gcmStatus = null;
+    private static String GCM_token = null;
+    private static Context mContext = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-        mContext = this;
+
 
         doorControlButton = (Button)findViewById(R.id.toggleDoorButton);
         doorRemoteButton = (Button)findViewById(R.id.gcmSending);
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         gcmStatus = (TextView)findViewById(R.id.gcm_status);
 
         doorRemoteButton.setBackgroundResource(R.drawable.gcm_icon);
-
+        mContext = this;
         //Utils.addWifiStateReceiver(mContext);
 
         mHandler = new Handler() {
@@ -131,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
         }else if(id == R.id.action_scan_wifi){
             startActivity(new Intent(this, WifiScanResult.class));
             return true;
+        }else if(id == R.id.action_scan_token){
+            startActivity(new Intent(this, QRCodeScanner.class ));
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -168,13 +175,25 @@ public class MainActivity extends AppCompatActivity {
     public void pressRemoteButton(View view) {
 
         Log.d(TAG, "pressDoorRemoteControlButton()>> ");
-        /*
-        * ask service to send cmd */
-        Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
-        intent.setAction(CommonConstants.ACTION_PRESS_REMOTE_BUTTON);
-        startService(intent);
-        /* disable botton as the door action is slow */
-        // MainActivity.sendMessage(CommonConstants.MSG_UPDATE_BUTTON_STATUS, CommonConstants.DISABLE_BUTTON);
+        String token = Utils.getGCMToken(this);
+        if(token.equalsIgnoreCase(this.getString(R.string.pref_GCM_token_empty_lable))){
+            Log.d(TAG, "pressDoorRemoteControlButton()>> GCM token is empty ");
+            Toast.makeText(this, R.string.waring_gcm_token_empty, Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, QRCodeScanner.class ));
+
+        }else{
+        /* * ask service to send cmd */
+            Log.d(TAG, "pressDoorRemoteControlButton()>> sending remote cmd ");
+            Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
+            intent.setAction(CommonConstants.ACTION_PRESS_REMOTE_BUTTON);
+            startService(intent);
+        }
+
+
+    }
+    public static String getQRcode(){
+        GCM_token = Utils.getGCMToken(mContext);
+        return  GCM_token;
     }
 
 

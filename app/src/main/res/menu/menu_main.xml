@@ -5,4 +5,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_scan_wifi" android:title="@string/action_scan_wifi"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_scan_token" android:title="@string/action_scan_QRcode"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

@@ -2,10 +2,12 @@ package com.radioyps.doorcontroller;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -104,6 +106,18 @@ public class Utils {
             isReceiverRegister = false;
         }
 
+    }
+
+    public static  void saveToken(String token, Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(context.getString(R.string.pref_GCM_token_key), token).apply();
+    }
+
+    public static String getGCMToken(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String token =  prefs.getString(context.getString(R.string.pref_GCM_token_key),
+                context.getString(R.string.pref_GCM_token_empty_lable));
+        return token;
     }
 
 }
