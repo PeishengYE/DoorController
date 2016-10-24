@@ -7,13 +7,13 @@
         android:title="@string/pref_client_ip_address_lable"
         android:key="@string/pref_client_ip_address_key"
         android:defaultValue="@string/pref_client_default_ip_address"
-        android:inputType="text"
+        android:inputType="phone"
         android:singleLine="true" />
     <EditTextPreference
         android:title="@string/pref_client_ip_port_lable"
         android:key="@string/pref_client_ip_port_key"
         android:defaultValue="@string/pref_client_default_ip_port"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:singleLine="true" />
 
     <CheckBoxPreference
