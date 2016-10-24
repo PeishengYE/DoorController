@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -220,8 +221,12 @@ public class PingControllerService extends IntentService {
 
             response = RESULT_UNKNOWN;
 
-            socket = new Socket(CommonConstants.IP_ADDR, CommonConstants.connectPort);
-            socket.setSoTimeout(CommonConstants.SOCKET_TIMEOUT);
+            socket = new Socket();
+
+            socket.connect(new InetSocketAddress(CommonConstants.IP_ADDR, CommonConstants.connectPort),
+                    CommonConstants.SOCKET_CONNECT_TIMEOUT);
+
+            socket.setSoTimeout(CommonConstants.SOCKET_READ_TIMEOUT);
 
             ByteArrayOutputStream byteArrayOutputStream =
                     new ByteArrayOutputStream(1024);

@@ -33,7 +33,9 @@ public final class CommonConstants {
     public static int connectPort = 5028;
     public static String CMD_PRESS_DOOR_BUTTON = "A412..&35?@!";
     public static String ACK_PRESS_DOOR_BUTTON =  "B835??/!xx";
-    public final static int SOCKET_TIMEOUT = 10 * 000; /*10 seconds */
+
+    public final static int SOCKET_READ_TIMEOUT = 10 * 1000; /*10 seconds on read stream timeout */
+    public final static int SOCKET_CONNECT_TIMEOUT = 4 * 1000; /*4 seconds on connecting host timeout */
     // ip address for testing
    // public final static String IP_ADDR = "192.168.12.238";
     // ip address for the real door controller
