@@ -128,9 +128,13 @@ public class Utils {
 
     public static int getPreferredIPPort(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         String port =  prefs.getString(context.getString(R.string.pref_client_ip_port_key),
                 context.getString(R.string.pref_client_default_ip_port));
-        return Integer.getInteger(port);
+        
+
+        return Integer.valueOf(port);
+
     }
 
 }
