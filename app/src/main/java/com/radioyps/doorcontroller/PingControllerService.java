@@ -223,7 +223,10 @@ public class PingControllerService extends IntentService {
 
             socket = new Socket();
 
-            socket.connect(new InetSocketAddress(CommonConstants.IP_ADDR, CommonConstants.connectPort),
+            String ipAddress = Utils.getPreferredIPAdd(getBaseContext());
+            int port = Utils.getPreferredIPPort(getBaseContext());
+
+            socket.connect(new InetSocketAddress(ipAddress, port),
                     CommonConstants.SOCKET_CONNECT_TIMEOUT);
 
             socket.setSoTimeout(CommonConstants.SOCKET_READ_TIMEOUT);

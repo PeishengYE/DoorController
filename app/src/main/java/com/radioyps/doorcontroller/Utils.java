@@ -120,4 +120,17 @@ public class Utils {
         return token;
     }
 
+    public static String getPreferredIPAdd(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_client_ip_address_key),
+                context.getString(R.string.pref_client_default_ip_address));
+    }
+
+    public static int getPreferredIPPort(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String port =  prefs.getString(context.getString(R.string.pref_client_ip_port_key),
+                context.getString(R.string.pref_client_default_ip_port));
+        return Integer.getInteger(port);
+    }
+
 }
