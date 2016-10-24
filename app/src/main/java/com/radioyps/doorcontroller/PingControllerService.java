@@ -94,7 +94,7 @@ public class PingControllerService extends IntentService {
            Log.d(TAG, "onHandleIntent()>> GCM sending ");
            MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
 //           sendGCM(CommonConstants.GCM_authrized_mesg);
-                       sendGCM(BuildConfig.DOORCONFIRMKAY);
+                     //  sendGCM(BuildConfig.DOORCONFIRMKAY);
 
         }
     }

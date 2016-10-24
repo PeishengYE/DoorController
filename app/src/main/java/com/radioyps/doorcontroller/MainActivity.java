@@ -184,13 +184,20 @@ public class MainActivity extends AppCompatActivity {
         }else{
         /* * ask service to send cmd */
             Log.d(TAG, "pressDoorRemoteControlButton()>> sending remote cmd ");
-            Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
-            intent.setAction(CommonConstants.ACTION_PRESS_REMOTE_BUTTON);
-            startService(intent);
+//            Intent intent = new Intent(getApplicationContext(), PingControllerService.class);
+//            intent.setAction(CommonConstants.ACTION_PRESS_REMOTE_BUTTON);
+//            startService(intent);
+            MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
+            sendGCM(BuildConfig.DOORCONFIRMKAY);
         }
-
-
     }
+
+    private void sendGCM(String message){
+        GcmSendTask gcmTask = new GcmSendTask();
+        String [] cmd = new String[] {message, ""};
+        gcmTask.execute(cmd);
+    }
+
     public static String getQRcode(){
         GCM_token = Utils.getGCMToken(mContext);
         return  GCM_token;
