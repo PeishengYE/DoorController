@@ -28,6 +28,7 @@ public class QRCodeScanner extends FragmentActivity implements ZXingScannerView.
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);
         if(savedInstanceState == null){

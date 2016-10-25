@@ -1,10 +1,13 @@
 package com.radioyps.doorcontroller;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView gcmStatus = null;
     private static String GCM_token = null;
     private static Context mContext = null;
-
+    private  static final int MY_PERMISSIONS_REQUEST_USE_CAMERA = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                MY_PERMISSIONS_REQUEST_USE_CAMERA);
 
     }
 

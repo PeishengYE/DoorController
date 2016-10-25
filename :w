@@ -1,0 +1,40 @@
+# DoorController
+This is a personal project to control my garage door. 
+## Keyword: 
+Google Cloud Message, Embedded LINUX, Android APP, IO control 
+
+## 1) Hardware:
+The controller is using an A13 PCB board. To find out what's A13, you can follow [this link]
+https://www.olimex.com/wiki/A13-OLinuXino.  
+
+By controlling the  24V output (The original use is for a screen backlight) from this PCB,
+I'm able to control a relay to simulate button pressing for my Garage
+
+## 2) Software:
+The software consis of four parts: 
+
+### Linux kernel programming: 
+   changed the original default output to off. To make more secrity, 
+   introduced new IOCTL command to lock this operation not be triggered by any other process 
+
+### Linux userspace application: 
+   This is a server waiting for connection from the Android app. It support two command sent by Android App, 
+   the ping command and the real open/close command 
+   
+### Embedded Linux making 
+   Establish an WIFI network connection with an External USB WIFI dongle; 
+   filesystem making
+
+### Android App
+   A network broadcast receiver to monitor the WIFI network change event
+   A Intent service to do the network connection with controller and update UI according the connection result
+
+
+###  About Google Cloud Message 
+   To establish a WIFI connection may take more than three minutes when the WIFI signal is bad or the Home used router is too busy to reply.    This make the previous WIFI design inaccessible. That's why I introduce the Google Cloud Message. User can use any data connection to connect this door controller. 
+   
+   This design make the whole system very security and reliable, as GCM is secure by google.  Every GCM client have a unique token in the world.  The disadvantage is that we need a Android Phone/Tablet running Google Cloud Message Service to receive this message. Then when this message arrive, it send a requirement to the door controller. it works like a proxy.
+
+Fortunately we can use any cheap Phone or tablet to do this task, like the Datawind cheap device. You do not need a beautiful screen or  a good touch screen. 
+
+   In the future development, we can also use this device as our home sensor gateway. 
