@@ -35,6 +35,33 @@
                 <action android:name="android.net.wifi.SCAN_RESULTS_AVAILABLE_ACTION" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="gcm.play.android.samples.com.gcmquickstart" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.radioyps.doorcontroller.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <!-- [END gcm_listener] -->
+        <!-- [START instanceId_listener] -->
+        <service
+            android:name="com.radioyps.doorcontroller.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".WifiScanResult">
         </activity>
@@ -51,7 +78,11 @@
         <service
             android:name=".PingControllerService"
             android:enabled="true" />
-
+        <service
+            android:name=".GCMGateWay"
+            android:exported="false">
+        </service>
+        <receiver android:name=".AlarmReceiver"/>
 
 
     </application>

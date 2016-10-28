@@ -20,13 +20,17 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'DOORCONFIRMKAY', MyDoorConfirmKey
         it.buildConfigField 'String', 'GCMAPIKEY', MyGCMAPIKey
+        it.buildConfigField 'String', 'MySenderID', MySenderID
+
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-gcm:7.8.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
+
     compile 'me.dm7.barcodescanner:zxing:1.9'
 }
