@@ -44,10 +44,13 @@ import java.net.URL;
 
             toSend.append(postData);
             toSend.append(params[0]);
-            toSend.append("\", \"sendTime\": \"");
+            toSend.append("\", \"");
+            toSend.append(CommonConstants.GCM_SENDING_TIME_KEY);
+            toSend.append("\": \"");
             toSend.append(currentTime);
-
-            toSend.append("\", \"GCMtoken\": \"");
+            toSend.append("\", \"");
+            toSend.append(CommonConstants.GCM_SENDING_TOKEN_KEY);
+            toSend.append("\": \"");
             String localToken = MainActivity.getLocalToken();
             toSend.append(localToken);
 

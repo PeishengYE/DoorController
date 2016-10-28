@@ -46,5 +46,7 @@ public final class CommonConstants {
     public static final String PREF_IS_LOCAL_TOKEN_RECEVIED = "com.radioyps.doorcontroller.PREF_IS_TOKEN_RECEVIED";
     public static final String PREF_LOCAL_TOKEN_KEY = "com.radioyps.doorcontroller.PREF_SAVED_TOKEN";
 
+    public static final String GCM_SENDING_TOKEN_KEY = "GCMToken";
+    public static final String GCM_SENDING_TIME_KEY = "sendTime";
 
 }
