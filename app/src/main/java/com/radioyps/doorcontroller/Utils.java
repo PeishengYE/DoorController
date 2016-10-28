@@ -139,7 +139,7 @@ public class Utils {
         if((port == null)|| (port.trim().length() == 0 )){
             port = context.getString(R.string.pref_client_default_ip_port);
         }
-        return Integer.valueOf(port);
+        return Integer.parseInt(port);
 
     }
 
