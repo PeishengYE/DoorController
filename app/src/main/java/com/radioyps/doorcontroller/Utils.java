@@ -117,14 +117,37 @@ public class Utils {
 
     }
 
-    public static  void saveToken(String token, Context context) {
+    public static  void saveRemoteToken(String token, Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putString(context.getString(R.string.pref_GCM_token_key), token).apply();
     }
 
-    public static String getGCMToken(Context context) {
+    public static String getGCMRemoteToken(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String token =  prefs.getString(context.getString(R.string.pref_GCM_token_key),
+                context.getString(R.string.pref_GCM_token_empty_lable));
+        return token;
+    }
+
+
+    public static  void saveLocalToken(String token, Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putBoolean(CommonConstants.PREF_IS_LOCAL_TOKEN_RECEVIED, true).apply();
+        prefs.edit().putString(CommonConstants.PREF_LOCAL_TOKEN_KEY, token).apply();
+    }
+
+    public static  void  initDefaultSharePreferenceForLocalGCMToken(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        prefs.edit().putBoolean(CommonConstants.PREF_IS_LOCAL_TOKEN_RECEVIED, false).apply();
+        prefs.edit().putString(CommonConstants.PREF_LOCAL_TOKEN_KEY, "empty").apply();
+
+    }
+
+    public static String getGCMLocalToken(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String token =  prefs.getString(CommonConstants.PREF_LOCAL_TOKEN_KEY,
                 context.getString(R.string.pref_GCM_token_empty_lable));
         return token;
     }
@@ -160,10 +183,10 @@ public class Utils {
         }
         return true;
     }
-    public static boolean isTokenRecevied(Context context){
+    public static boolean isLocalTokenRecevied(Context context){
         boolean ret = false;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        ret = prefs.getBoolean(CommonConstants.PREF_IS_TOKEN_RECEVIED, false);
+        ret = prefs.getBoolean(CommonConstants.PREF_LOCAL_TOKEN_KEY, false);
         return ret;
     }
 

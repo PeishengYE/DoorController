@@ -43,8 +43,8 @@ public final class CommonConstants {
     public final static String NETWORK_ERROR = "network error";
     public static final String GCM_authrized_mesg = "ui918*(Qdf";
 
-    public static final String PREF_IS_TOKEN_RECEVIED = "com.radioyps.doorcontroller.PREF_IS_TOKEN_RECEVIED";
-    public static final String PREF_SAVED_TOKEN = "com.radioyps.doorcontroller.PREF_SAVED_TOKEN";
+    public static final String PREF_IS_LOCAL_TOKEN_RECEVIED = "com.radioyps.doorcontroller.PREF_IS_TOKEN_RECEVIED";
+    public static final String PREF_LOCAL_TOKEN_KEY = "com.radioyps.doorcontroller.PREF_SAVED_TOKEN";
 
 
 }

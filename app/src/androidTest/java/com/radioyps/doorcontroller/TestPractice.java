@@ -32,7 +32,7 @@ public class TestPractice extends AndroidTestCase {
             fail("XX should never happen");
         }
 
-//        Utils.getGCMToken()
+//        Utils.getGCMRemoteToken()
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         prefs.edit().putString(mContext.getString(R.string.pref_client_ip_port_key), "").apply();
         int port = Utils.getPreferredIPPort(mContext);

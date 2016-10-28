@@ -44,7 +44,8 @@ public class PingControllerService extends IntentService {
     }
 
     public static void enableConnect(){
-        isContinueConnect = true;
+//        isContinueConnect = true;
+        isContinueConnect = false;
     }
 
     public static void disableConnect(){

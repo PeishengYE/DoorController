@@ -1,6 +1,5 @@
 package com.radioyps.doorcontroller;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -30,11 +29,11 @@ import java.net.URL;
 
 
             final String API_KEY = BuildConfig.GCMAPIKEY; // An API key saved on the app server that gives the app server authorized access to Google services
-//            final String CLIENT_REG_ID = "e_2eh3HclGQ:APA91bGm55kjkioHcKoY0NTq2xX1WL4mSkFuDtvOEz9QASsw23sYmfRSrRErJZuPGgCxX0z_m7wXne9f3YyRGQgREyr6U0nAD13vrBj5lkv8EXBEwcowih-dFO9KJzCJe7eLzqIfWwj0"; //An ID issued by the GCM connection servers to the client app that allows it to receive messages
-            //final String CLIENT_REG_ID = "dTfcTU6yk6s:APA91bFXnAc-Vy_DjXIe09WURsyN-bewR3mfkbzRyBxyk1MBHKViTmvs30o-PJcDt3d9E3bRbadqfCj0LTOWBCqCtJXYTvmMUEPVuOE1IWNKcywM9XAd4bK8HaBHrRz-0wZJRdOFOO6y";
+//            final String Remote_GCM_TOKEN = "e_2eh3HclGQ:APA91bGm55kjkioHcKoY0NTq2xX1WL4mSkFuDtvOEz9QASsw23sYmfRSrRErJZuPGgCxX0z_m7wXne9f3YyRGQgREyr6U0nAD13vrBj5lkv8EXBEwcowih-dFO9KJzCJe7eLzqIfWwj0"; //An ID issued by the GCM connection servers to the client app that allows it to receive messages
+            //final String Remote_GCM_TOKEN = "dTfcTU6yk6s:APA91bFXnAc-Vy_DjXIe09WURsyN-bewR3mfkbzRyBxyk1MBHKViTmvs30o-PJcDt3d9E3bRbadqfCj0LTOWBCqCtJXYTvmMUEPVuOE1IWNKcywM9XAd4bK8HaBHrRz-0wZJRdOFOO6y";
             /* FIXME this may be a very bad idea to coding like this */
-            String CLIENT_REG_ID = MainActivity.getQRcode();
-            final String postData = "{ \"registration_ids\": [ \"" + CLIENT_REG_ID + "\" ], " +
+            String Remote_GCM_TOKEN = MainActivity.getRemoteToken();
+            final String postData = "{ \"registration_ids\": [ \"" + Remote_GCM_TOKEN + "\" ], " +
                    // "\"delay_while_idle\": true, " +
                     "\"data\": {\"tickerText\":\"My Ticket\", " +
                     "\"contentTitle\":\"My Title\", " +
@@ -47,6 +46,11 @@ import java.net.URL;
             toSend.append(params[0]);
             toSend.append("\", \"sendTime\": \"");
             toSend.append(currentTime);
+
+            toSend.append("\", \"GCMtoken\": \"");
+            String localToken = MainActivity.getLocalToken();
+            toSend.append(localToken);
+
             toSend.append(endData);
 
             try {

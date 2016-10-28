@@ -1,10 +1,7 @@
 package com.radioyps.doorcontroller;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -70,7 +67,7 @@ public class QRCodeScanner extends FragmentActivity implements ZXingScannerView.
         String token = mScanningContent;
         Log.v(TAG, "QR code: " + rawResult.getText()); // Prints scan results
         Log.v(TAG, "QR Format: " + rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
-        Utils.saveToken(token, this);
+        Utils.saveRemoteToken(token, this);
         Toast.makeText(this, R.string.QRcode_scan_success, Toast.LENGTH_LONG).show();
         resultHandler = this;
         finish();

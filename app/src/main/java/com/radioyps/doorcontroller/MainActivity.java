@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
     public void pressRemoteButton(View view) {
 
         Log.d(TAG, "pressDoorRemoteControlButton()>> ");
-        String token = Utils.getGCMToken(this);
+        String token = Utils.getGCMRemoteToken(this);
         if(token.equalsIgnoreCase(this.getString(R.string.pref_GCM_token_empty_lable))){
             Log.d(TAG, "pressDoorRemoteControlButton()>> GCM token is empty ");
             Toast.makeText(this, R.string.waring_gcm_token_empty, Toast.LENGTH_LONG).show();
@@ -230,10 +230,13 @@ public class MainActivity extends AppCompatActivity {
         gcmTask.execute(cmd);
     }
 
-    public static String getQRcode(){
-        GCM_token = Utils.getGCMToken(mContext);
+    public static String getRemoteToken(){
+        GCM_token = Utils.getGCMRemoteToken(mContext);
         return  GCM_token;
     }
 
-
+    public static String getLocalToken(){
+        GCM_token = Utils.getGCMLocalToken(mContext);
+        return  GCM_token;
+    }
 }

@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -14,46 +13,18 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.app.AlarmManager;
-import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ConnectException;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
 
 
 /**
@@ -213,12 +184,12 @@ public class GCMGateWay extends Service {
 
             if(state == state.started){
                 Log.i(TAG, "CommandHandler()>> start() already started, give up");
-                if(Utils.isTokenRecevied(mContext)){
+                if(Utils.isLocalTokenRecevied(mContext)){
 //                    Utility.updateUIMessage("token recevied", mContext);
                 }
                 return;
             }
-            initDefaultSharePreference();
+            Utils.initDefaultSharePreferenceForLocalGCMToken(mContext);
             /* */
             String token = Utils.startRegistration(getBaseContext());
             if(token == null){
@@ -226,7 +197,7 @@ public class GCMGateWay extends Service {
             }
 
             try {
-                saveToken(token);
+                Utils.saveLocalToken(token, mContext);
                 Utils.subscribeTopics(token, getBaseContext());
             }catch (Exception e){
                 e.printStackTrace();
@@ -288,7 +259,7 @@ public class GCMGateWay extends Service {
             }
 
             try {
-                saveToken(token);
+                Utils.saveLocalToken(token,getBaseContext());
                 Utils.subscribeTopics(token, getBaseContext());
             }catch (Exception e){
                 e.printStackTrace();
@@ -298,11 +269,6 @@ public class GCMGateWay extends Service {
         }
     }
 
-    private  void saveToken(String token) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        prefs.edit().putBoolean(CommonConstants.PREF_IS_TOKEN_RECEVIED, true).apply();
-        prefs.edit().putString(CommonConstants.PREF_SAVED_TOKEN, token).apply();
-    }
 
     public void SetAlarm(Context context) {
         //Toast.makeText(context, R.string.updating_in_progress, Toast.LENGTH_LONG).show(); // For example
@@ -328,14 +294,7 @@ public class GCMGateWay extends Service {
         context.startService(intent);
     }
 
-    private  void initDefaultSharePreference()
-    {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        prefs.edit().putBoolean(CommonConstants.PREF_IS_TOKEN_RECEVIED, false).apply();
-        prefs.edit().putString(CommonConstants.PREF_SAVED_TOKEN, "empty").apply();
-
-    }
 
 
     public static void onReceiveGCm(String reason, Context context) {
