@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static Handler mHandler;
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 
     private Button doorControlButton = null;
@@ -83,6 +87,28 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.CAMERA},
                 MY_PERMISSIONS_REQUEST_USE_CAMERA);
 
+
+        if (checkPlayServices()) {
+            GCMGateWay.start("MainActivity start", this);
+        }
+
+    }
+
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override
