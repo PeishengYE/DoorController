@@ -49,4 +49,7 @@ public final class CommonConstants {
     public static final String GCM_SENDING_TOKEN_KEY = "GCMToken";
     public static final String GCM_SENDING_TIME_KEY = "sendTime";
 
+    public static final String TEMP_IMAG_FILENAME = "GCM_recevied_image.jpg";
+
+
 }

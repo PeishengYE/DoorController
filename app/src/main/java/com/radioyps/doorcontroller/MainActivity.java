@@ -220,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
 //            intent.setAction(CommonConstants.ACTION_PRESS_REMOTE_BUTTON);
 //            startService(intent);
             MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
-            sendGCM(BuildConfig.DOORCONFIRMKAY);
+            //sendGCM(BuildConfig.DOORCONFIRMKAY);
+            sendGCM("HelloWorld");
         }
     }
 

@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -14,6 +15,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.Log;
 import android.app.NotificationManager;
 
@@ -22,6 +24,9 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ConnectException;
@@ -68,6 +73,10 @@ public class GCMGateWay extends Service {
 
     private static long TIME_INTERVAL = 15*1000;
     private static long TIME_DELAY = 3*1000;
+    private static boolean isImageDataReceviedFinished = true;
+    private static String imageDataRecevied = null;
+    private static int currentPacketIndex = 0;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -213,14 +222,14 @@ public class GCMGateWay extends Service {
 
 
         private void mesgRecived(){
-            Log.i(TAG, "CommandHandler()>> mesgRecived()" );
+            Log.i(TAG, "CommandHandler()>> mesgRecived()");
             String timeForSending = "Not avaiable";
             Long sendTimeLong;
             Long currentTime;
             Long timePassed = 100L;
             try{
                 Bundle data = MyGcmListenerService.dataMessage;
-
+                checkImageDataArrived(data);
                 String message = data.getString("message");
                 String sendTime = data.getString("sendTime");
                 if(sendTime != null){
@@ -231,19 +240,65 @@ public class GCMGateWay extends Service {
                     timeForSending = "Time elapsed on sending: " + timePassed + "seconds";
                 }
 
-                if(GCMGateWay.isAuthorized(message) && (timePassed < 20)){
-            //        GCMGateWay.sendCmd(BuildConfig.DoorOpenCmdUsedByLocalNetwork);
-                    LogToFile.toFile(TAG, "sending open door cmd");
-                    LogToFile.toFile(TAG,timeForSending);
-                }else{
+
                     if(timePassed < 20)
                         LogToFile.toFile(TAG,"no Authorized message recevied, abort. message: " + message);
                     else
                         LogToFile.toFile(TAG,"aborted pending message: " + message);
-                }
+
             }catch (Exception e){
                 e.printStackTrace();
                 LogToFile.toFile(TAG, "Exception on receving message : " + e.toString());
+            }
+
+        }
+
+        private void checkImageDataArrived(Bundle data){
+
+            String imageData = data.getString("DATA_0");
+            if(imageData != null){
+                isImageDataReceviedFinished = false;
+                imageDataRecevied = imageData;
+                currentPacketIndex = 1;
+                return;
+            }
+
+            String finishedFlag = data.getString("DATA_888");
+            if(finishedFlag != null){
+                isImageDataReceviedFinished = true;
+
+                Log.i(TAG, "image data length " + imageDataRecevied.length());
+                showImage();
+                currentPacketIndex = 0;
+                return;
+            }
+
+            String imageFlag = "DATA_" + currentPacketIndex;
+            imageData = data.getString(imageFlag);
+            if(imageData != null){
+                imageDataRecevied += imageData;
+                currentPacketIndex ++;
+            }
+
+        }
+
+        private void showImage(){
+            try {
+                byte[] image = Base64.decode(imageDataRecevied, Base64.DEFAULT);
+                Log.i(TAG, "showImage()>> Ok on decoding Base64" );
+                saveImageToFile(image);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        private void saveImageToFile(byte[] imageData){
+            try{
+                File fileOutPut = new File(Environment.getExternalStorageDirectory(), CommonConstants.TEMP_IMAG_FILENAME);
+                OutputStream osFile = new FileOutputStream(fileOutPut);
+                osFile.write(imageData);
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
         }
