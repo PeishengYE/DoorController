@@ -49,5 +49,6 @@
 
     <string name="waring_gcm_token_empty">Google Instant id is empty, please scan it..</string>
     <string name="QRcode_scan_success">Scan QRcode Succesfully </string>
+    <string name="Remote_image_flag">Remote Image </string>
 
 </resources>

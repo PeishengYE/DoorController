@@ -77,6 +77,12 @@
             android:theme="@style/SettingsTheme">
         </activity>
 
+        <activity
+            android:name=".ImageViewActivity"
+            android:theme="@style/SettingsTheme">
+        </activity>
+
+
         <service
             android:name=".PingControllerService"
             android:enabled="true" />

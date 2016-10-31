@@ -286,6 +286,9 @@ public class GCMGateWay extends Service {
             try {
                 byte[] image = Base64.decode(imageDataRecevied, Base64.DEFAULT);
                 Log.i(TAG, "showImage()>> Ok on decoding Base64" );
+                Intent intent = new Intent(mContext, ImageViewActivity.class);
+                intent.putExtra(ImageViewActivity.EXTRA_IMAGE_BYTE_ARRAY, image);
+                startActivity(intent);
                 saveImageToFile(image);
             }catch (Exception e){
                 e.printStackTrace();
