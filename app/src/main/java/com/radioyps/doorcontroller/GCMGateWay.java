@@ -288,6 +288,7 @@ public class GCMGateWay extends Service {
                 Log.i(TAG, "showImage()>> Ok on decoding Base64" );
                 Intent intent = new Intent(mContext, ImageViewActivity.class);
                 intent.putExtra(ImageViewActivity.EXTRA_IMAGE_BYTE_ARRAY, image);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 saveImageToFile(image);
             }catch (Exception e){

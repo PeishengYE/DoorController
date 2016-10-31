@@ -79,7 +79,7 @@
 
         <activity
             android:name=".ImageViewActivity"
-            android:theme="@style/SettingsTheme">
+            android:theme="@style/MainTheme">
         </activity>
 
 
