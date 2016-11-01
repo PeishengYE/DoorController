@@ -41,5 +41,6 @@ Fortunately we can use any cheap Phone or tablet to do this task, like the Dataw
    In the future development, we can also use this device as our home sensor gateway. 
 
 ###  ScreenShot of the current UI 
-[![UI in English](https://github.com/PeishengYE/DoorController/blob/master/docs/samll/Ui_doorController_003.png)](https://github.com/PeishengYE/DoorController/blob/master/docs/Ui_doorController_003.png)
-[![UI in Chinese](https://github.com/PeishengYE/DoorController/blob/master/docs/samll/Ui_doorController_001.png)](https://github.com/PeishengYE/DoorController/blob/master/docs/Ui_doorController_001.png)
+![UI in English](https://github.com/PeishengYE/DoorController/blob/master/docs/samll/Ui_doorController_003.png)
+![UI in Chinese](https://github.com/PeishengYE/DoorController/blob/master/docs/small/Ui_doorController_001.png)
+
