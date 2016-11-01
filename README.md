@@ -42,5 +42,7 @@ Fortunately we can use any cheap Phone or tablet to do this task, like the Dataw
 
 ###  ScreenShot of the current UI 
 ![UI in English](https://github.com/PeishengYE/DoorController/blob/master/docs/small/Ui_doorController_003.png)
+[UI in English](https://github.com/PeishengYE/DoorController/blob/master/docs/Ui_doorController_003.png)
 ![UI in Chinese](https://github.com/PeishengYE/DoorController/blob/master/docs/small/Ui_doorController_001.png)
+[UI in Chinese](https://github.com/PeishengYE/DoorController/blob/master/docs/Ui_doorController_001.png)
 
