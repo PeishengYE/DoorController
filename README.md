@@ -2,7 +2,8 @@
 This is a personal project to control my garage door. 
 ## Keyword: 
 Google Cloud Message, Embedded LINUX, Android APP, IO control 
-
+## Video: 
+[![VIDEO](https://github.com/PeishengYE/DoorController/blob/master/docs/Garage_door_testing_0000.png)](https://www.youtube.com/watch?v=-v5WE888Jag)
 ## 1) Hardware:
 The controller is using an A13 PCB board. To find out what's A13, you can follow [this link]
 (https://www.olimex.com/wiki/A13-OLinuXino)  
