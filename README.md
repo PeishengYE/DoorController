@@ -45,3 +45,9 @@ Fortunately we can use any cheap Phone or tablet to do this task, like the Dataw
 ------------ | -------------
 ![UI in English](https://github.com/PeishengYE/DoorController/blob/master/docs/small/Ui_doorController_003.png)| ![UI in Chinese](https://github.com/PeishengYE/DoorController/blob/master/docs/small/Ui_doorController_001.png)
 
+###  HARDWARE PHOTOES 
+[DOOR CONTROLLER_1](https://github.com/PeishengYE/DoorController/blob/master/docs/A13_door_controller_switch_board_000_.JPG)| [DOOR_CONTROLLER_2](https://github.com/PeishengYE/DoorController/blob/master/docs/A13_door_controller_switch_board_001_.JPG)| [MOTION_DETECTION](https://github.com/PeishengYE/DoorController/blob/master/docs/A13_motion_detection_board_000_.JPG)| [GCM GATEWAY](https://github.com/PeishengYE/DoorController/blob/master/docs/Google_Cloud_message_gateway_000_.JPG)
+------------ | ------------- | ------------- | -------------
+![DOOR CONTROLLER_1](https://github.com/PeishengYE/DoorController/blob/master/docs/small/A13_door_controller_switch_board_000_.JPG)| ![DOOR_CONTROLLER_2](https://github.com/PeishengYE/DoorController/blob/master/docs/small/A13_door_controller_switch_board_001_.JPG)| ![MOTION_DETECTION](https://github.com/PeishengYE/DoorController/blob/master/docs/small/A13_motion_detection_board_000_.JPG)| ![GCM GATEWAY](https://github.com/PeishengYE/DoorController/blob/master/docs/small/Google_Cloud_message_gateway_000_.JPG)
+
+
