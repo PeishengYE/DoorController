@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private Button doorControlButton = null;
-    private Button doorRemoteButton = null;
+    private static Button doorRemoteButton = null;
     private TextView wifiStatus = null;
     private TextView cmdStatus = null;
     private TextView gcmStatus = null;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         cmdStatus = (TextView)findViewById(R.id.cmd_status);
         gcmStatus = (TextView)findViewById(R.id.gcm_status);
 
-        doorRemoteButton.setBackgroundResource(R.drawable.gcm_icon);
+        doorRemoteButton.setBackgroundResource(R.drawable.button);
         mContext = this;
         //Utils.addWifiStateReceiver(mContext);
 
@@ -78,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case CommonConstants.MSG_GCM_CMD_STATUS:
                         gcmStatus.setText((String) msg.obj);
+                        String messg2 =  (String) msg.obj;
+                        if(messg2.equalsIgnoreCase(mContext.getString(R.string.remote_door_button_ready))){
+                            Log.d(TAG, "FLAG_GCM_REMOTE_CONFIRMATION_OK >> enable button ");
+                            doorRemoteButton.setEnabled(true);
+                        }else{
+
+                        }
                         break;
                 }
             }
@@ -144,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        doorRemoteButton = null;
     }
 
     @Override
@@ -181,8 +189,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(message.equalsIgnoreCase(CommonConstants.FLAG_GCM_FAILURE)){
             mesg = mContext.getString(R.string.remote_door_cmd_in_failure);
-        }else if(message.equalsIgnoreCase(CommonConstants.FLAG_GCM_OK)){
+        }else if(message.equalsIgnoreCase(CommonConstants.FLAG_GCM_SENDING_OK)){
             mesg = mContext.getString(R.string.remote_door_cmd_in_success);
+        }else if(message.equalsIgnoreCase(CommonConstants.FLAG_GCM_REMOTE_CONFIRMATION_OK)){
+
+            mesg = mContext.getString(R.string.remote_door_button_ready);
         }else
             mesg = message;
 
@@ -222,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, getString(R.string.remote_door_cmd_in_progress));
             //sendGCM(BuildConfig.DOORCONFIRMKAY);
             sendGCM("HelloWorld");
+            doorRemoteButton.setEnabled(false);
         }
     }
 
@@ -239,5 +251,10 @@ public class MainActivity extends AppCompatActivity {
     public static String getLocalToken(){
         GCM_token = Utils.getGCMLocalToken(mContext);
         return  GCM_token;
+    }
+    public static void enableRemoteButton(){
+
+            MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, CommonConstants.FLAG_GCM_REMOTE_CONFIRMATION_OK);
+
     }
 }

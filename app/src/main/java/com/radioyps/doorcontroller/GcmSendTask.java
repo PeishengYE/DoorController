@@ -100,7 +100,7 @@ import java.net.URL;
 
                 try {
                     JSONObject jsonObject = new JSONObject(message);
-                    MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, CommonConstants.FLAG_GCM_OK);
+                    MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, CommonConstants.FLAG_GCM_SENDING_OK);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     MainActivity.sendMessage(CommonConstants.MSG_GCM_CMD_STATUS, CommonConstants.FLAG_GCM_FAILURE);

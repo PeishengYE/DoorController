@@ -15,8 +15,9 @@ public final class CommonConstants {
     public static final String ACTION_STOP_CONNECTING = "com.radioyps.doorcontroller.ACTION_STOP_CONNECTING";
     public static final String ACTION_START_CONNECTING = "com.radioyps.doorcontroller.ACTION_START_CONNECTING";
 
-    public static final String FLAG_GCM_OK = "com.radioyps.doorcontroller.FLAG_GCM_OK";
+    public static final String FLAG_GCM_SENDING_OK = "com.radioyps.doorcontroller.FLAG_SENDING_OK";
     public static final String FLAG_GCM_FAILURE = "com.radioyps.doorcontroller.FLAG_GCM_FAILURE";
+    public static final String FLAG_GCM_REMOTE_CONFIRMATION_OK = "com.radioyps.doorcontroller.FLAG_GCM_REMOTE_CONFIRMATION_OK";
 
     public static final int MSG_UPDATE_WIFI_STATUS = 0x10;
     public static final int MSG_UPDATE_BUTTON_STATUS = 0x11;
@@ -50,6 +51,7 @@ public final class CommonConstants {
     public static final String GCM_SENDING_TIME_KEY = "sendTime";
 
     public static final String TEMP_IMAG_FILENAME = "GCM_recevied_image.jpg";
+    public static final String REMOTE_CONFIRM_MESG = "EXECUTION CONFIRMED";
 
 
 }

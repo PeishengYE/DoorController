@@ -240,6 +240,10 @@ public class GCMGateWay extends Service {
                     timeForSending = "Time elapsed on sending: " + timePassed + "seconds";
                 }
 
+                if((message != null) &&(message.equalsIgnoreCase(CommonConstants.REMOTE_CONFIRM_MESG))){
+                    LogToFile.toFile(TAG,"Remote confirmed, enable remote button");
+                    MainActivity.enableRemoteButton();
+                }
 
                     if(timePassed < 20)
                         LogToFile.toFile(TAG,"no Authorized message recevied, abort. message: " + message);
