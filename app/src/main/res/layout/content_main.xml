@@ -57,7 +57,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:onClick="pressRemoteButton" />
 
-    <TextView android:text="@string/remote_door_control_status"
+    <TextView android:text="@string/remote_door_button_ready"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gcm_status"

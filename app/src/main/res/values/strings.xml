@@ -27,7 +27,8 @@
     <string name="waiting_wifi_connected">Waiting controller</string>
     <string name="remote_door_control_status">Remote control status</string>
     <string name="remote_door_cmd_in_progress">Sending Remote command</string>
-    <string name="remote_door_cmd_in_success">Finished succesfully</string>
+    <string name="remote_door_cmd_in_success">Waiting remote confirm</string>
+    <string name="remote_door_button_ready">Remote button ready</string>
     <string name="remote_door_cmd_in_failure">Error on sending remote command</string>
     <string name="pref_client_ip_address_key">sensor_IP address_setting_key</string>
     <string name="pref_client_ip_port_key">sensor_IP_port_setting_key</string>
